@@ -34,7 +34,7 @@ public class OperationComponent {
     }
 
     public OperationComponent subOperation(int start, int end) {
-        if (length < end - start || start < 0 || end > length) {
+        if (length < end - start || start < 0 || end > length || end < start || start >= length) {
             throw new IndexOutOfBoundsException();
         }
         if (operationType == OP_COMP_RETAIN) {
@@ -42,5 +42,9 @@ public class OperationComponent {
         }
         return new OperationComponent(operationType, position + start, value.substring(start, end),
                 end - start);
+    }
+
+    public void shiftPosition(int amount) {
+        position += amount;
     }
 }

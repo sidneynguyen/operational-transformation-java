@@ -12,11 +12,11 @@ public class OperationComponentTest {
         OperationComponent component1 = component.subOperation(0, 2);
         OperationComponent component2 = component.subOperation(2, 5);
 
-        assertEquals(component1.getPosition(), 1);
-        assertEquals(component1.getLength(), 2);
+        assertEquals(1, component1.getPosition());
+        assertEquals(2, component1.getLength());
 
-        assertEquals(component2.getPosition(), 3);
-        assertEquals(component2.getLength(), 3);
+        assertEquals(3, component2.getPosition());
+        assertEquals(3, component2.getLength());
     }
 
     @Test
@@ -26,13 +26,13 @@ public class OperationComponentTest {
         OperationComponent component1 = component.subOperation(0, 2);
         OperationComponent component2 = component.subOperation(2, 5);
 
-        assertEquals(component1.getPosition(), 1);
-        assertEquals(component1.getLength(), 2);
-        assertEquals(component1.getValue(), "ab");
+        assertEquals(1, component1.getPosition());
+        assertEquals(2, component1.getLength());
+        assertEquals("ab", component1.getValue());
 
-        assertEquals(component2.getPosition(), 3);
-        assertEquals(component2.getLength(), 3);
-        assertEquals(component2.getValue(), "cde");
+        assertEquals(3, component2.getPosition());
+        assertEquals(3, component2.getLength());
+        assertEquals("cde", component2.getValue());
     }
 
     @Test
@@ -42,12 +42,12 @@ public class OperationComponentTest {
         OperationComponent component1 = component.subOperation(0, 2);
         OperationComponent component2 = component.subOperation(2, 5);
 
-        assertEquals(component1.getPosition(), 1);
-        assertEquals(component1.getLength(), 2);
-        assertEquals(component1.getValue(), "ab");
+        assertEquals(1, component1.getPosition());
+        assertEquals(2, component1.getLength());
+        assertEquals("ab", component1.getValue());
 
-        assertEquals(component2.getPosition(), 3);
-        assertEquals(component2.getLength(), 3);
-        assertEquals(component2.getValue(), "cde");
+        assertEquals(3, component2.getPosition());
+        assertEquals(3, component2.getLength());
+        assertEquals("cde", component2.getValue());
     }
 }
