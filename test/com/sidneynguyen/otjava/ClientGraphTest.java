@@ -8,48 +8,20 @@ import static org.junit.Assert.*;
 
 public class ClientGraphTest {
     @Test
-    public void insertClientOperation() {
-        String parentKey = UUID.randomUUID().toString();
-        OperationNode rootNode = new OperationNode(parentKey);
-        ClientGraph graph = new ClientGraph(rootNode);
-        Operation clientOp = new Operation();
-        clientOp.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 0, "abc", 3));
-        OperationNode currNode = graph.insertClientOperation(clientOp, parentKey);
-
-        assertEquals(graph.getCurrentClientNode().getHashKey(), currNode.getHashKey());
-    }
-
-    @Test
-    public void insertServerOperation() {
-        String parentKey = UUID.randomUUID().toString();
-        OperationNode rootNode = new OperationNode(parentKey);
-        ClientGraph graph = new ClientGraph(rootNode);
-        Operation serverOp = new Operation();
-        serverOp.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 0, "abc", 3));
-        OperationNode currNode = graph.insertClientOperation(serverOp, parentKey);
-
-        assertEquals(graph.getCurrentClientNode().getHashKey(), currNode.getHashKey());
-    }
-
-
-    @Test
     public void applyServerOperation() throws Exception {
-        Document document = new Document("go");
-        String parentKey = UUID.randomUUID().toString();
-        OperationNode rootNode = new OperationNode(parentKey);
-        ClientGraph graph = new ClientGraph(rootNode);
+        ClientGraph graph = new ClientGraph(UUID.randomUUID().toString());
         Operation clientOp = new Operation();
         clientOp.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 2, "a", 1));
-        OperationNode currClientNode = graph.insertClientOperation(clientOp, parentKey);
+        graph.insertClientOperation(clientOp, graph.getCurrentClientNode().getHashKey());
 
         Operation serverOp = new Operation();
         serverOp.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 2, "t", 1));
-        OperationNode currServerNode = graph.insertServerOperation(serverOp, parentKey);
+        graph.insertServerOperation(serverOp, UUID.randomUUID().toString(),
+                graph.getCurrentServerNode().getHashKey());
 
-        OperationNode currNode = graph.applyServerOperation(currServerNode);
+        Operation operation = graph.applyServerOperation();
 
-        assertEquals(graph.getCurrentClientNode(), currNode);
-        assertEquals(graph.getCurrentServerNode(), currNode);
+        assertEquals(graph.getCurrentClientNode().getParentNodeFromServerOperation().getServerOperation(), operation);
     }
 
 }

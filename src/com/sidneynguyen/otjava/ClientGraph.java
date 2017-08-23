@@ -7,14 +7,66 @@ public class ClientGraph {
     private Hashtable<String, OperationNode> operationNodes;
     private OperationNode currentClientNode;
     private OperationNode currentServerNode;
-    private OperationNode rootNode;
+    private Transformer transformer;
 
-    public ClientGraph(OperationNode rootNode) {
-        this.rootNode = rootNode;
+    public ClientGraph(String key) {
+        OperationNode rootNode = new OperationNode(key);
         operationNodes = new Hashtable<>();
         operationNodes.put(rootNode.getHashKey(), rootNode);
         currentClientNode = rootNode;
         currentServerNode = rootNode;
+        transformer = new Transformer();
+    }
+
+    public Operation insertClientOperation(Operation operation, String parentKey) {
+        if (!currentClientNode.getHashKey().equals(parentKey)) {
+            throw new RuntimeException("Operation is out-of-date");
+        }
+        OperationNode node = new OperationNode(UUID.randomUUID().toString());
+        node.setParentNodeFromClientOperation(currentClientNode);
+        currentClientNode.setClientNode(node);
+        currentClientNode.setClientOperation(operation);
+        operationNodes.put(node.getHashKey(), node);
+        currentClientNode = node;
+        return operation;
+    }
+
+    public void insertServerOperation(Operation operation, String key, String parentKey) {
+        if (!currentServerNode.getHashKey().equals(parentKey)) {
+            throw new RuntimeException("Operation is out-of-date");
+        }
+        OperationNode node = new OperationNode(key);
+        node.setParentNodeFromServerOperation(currentServerNode);
+        currentServerNode.setServerNode(node);
+        currentServerNode.setServerOperation(operation);
+        operationNodes.put(node.getHashKey(), node);
+        currentServerNode = node;
+    }
+
+    public Operation applyServerOperation() {
+        if (currentServerNode.getClientNode() != null) {
+            return null;
+        }
+        OperationNode serverNode = currentServerNode;
+        OperationNode parentNode = currentServerNode.getParentNodeFromServerOperation();
+        OperationNode clientNode = parentNode.getClientNode();
+        while (!parentNode.getHashKey().equals(currentClientNode.getHashKey())) {
+            OperationNode nextNode = new OperationNode(UUID.randomUUID().toString());
+            OperationPair pair = transformer.transform(parentNode.getClientOperation(), parentNode.getServerOperation());
+
+            clientNode.setServerOperation(pair.getServerOperation());
+            clientNode.setServerNode(nextNode);
+            nextNode.setParentNodeFromServerOperation(clientNode);
+
+            serverNode.setClientOperation(pair.getClientOperation());
+            serverNode.setClientNode(nextNode);
+            nextNode.setParentNodeFromClientOperation(serverNode);
+
+            serverNode = nextNode;
+            parentNode = serverNode.getParentNodeFromServerOperation();
+        }
+        currentClientNode = serverNode;
+        return currentClientNode.getParentNodeFromServerOperation().getServerOperation();
     }
 
     public OperationNode getCurrentClientNode() {
@@ -23,77 +75,5 @@ public class ClientGraph {
 
     public OperationNode getCurrentServerNode() {
         return currentServerNode;
-    }
-
-    public OperationNode insertClientOperation(Operation operation, String parentKey) {
-        if (!currentClientNode.getHashKey().equals(parentKey)) {
-            throw new RuntimeException("Operation is out-of-date");
-        }
-        String key = UUID.randomUUID().toString();
-        OperationNode node = new OperationNode(key);
-        node.setParentNodeFromClientOperation(currentClientNode);
-        currentClientNode.setClientNode(node);
-        currentClientNode.setClientOperation(operation);
-        operationNodes.put(key, node);
-        currentClientNode = node;
-        return node;
-    }
-
-    public OperationNode insertServerOperation(Operation operation, String parentKey) {
-        OperationNode parentNode = operationNodes.get(parentKey);
-        if (parentNode == null) {
-            throw new RuntimeException("Parent node does not exist");
-        }
-        String key = UUID.randomUUID().toString();
-        OperationNode node = new OperationNode(key);
-        node.setParentNodeFromServerOperation(parentNode);
-        parentNode.setServerNode(node);
-        parentNode.setServerOperation(operation);
-        operationNodes.put(key, node);
-        if (currentServerNode.getHashKey().equals(parentKey)) {
-            currentServerNode = node;
-        }
-        return node;
-    }
-
-    // TODO
-    public OperationNode applyServerOperation(OperationNode node) {
-        if (operationNodes.get(node.getHashKey()) == null) {
-            throw new RuntimeException("Server node does not exist");
-        }
-        OperationNode parentNode = node.getParentNodeFromServerOperation();
-        Operation clientOperation = parentNode.getClientOperation();
-        if (clientOperation == null) {
-            if (currentServerNode.getHashKey().equals(node.getHashKey())
-                    && currentClientNode.getHashKey().equals(parentNode.getHashKey())) {
-                currentClientNode = node;
-                return currentServerNode;
-            } else {
-                throw new RuntimeException("Corrupted graph structure");
-            }
-        }
-        Transformer transformer = new Transformer();
-        OperationNode currNode = node;
-        Operation serverOperation = parentNode.getServerOperation();
-        OperationNode clientNode = parentNode.getClientNode();
-        while (!parentNode.getHashKey().equals(currentClientNode.getHashKey())) {
-            OperationPair pair = transformer.transform(clientOperation, serverOperation);
-            Operation clientPrime = pair.getClientOperation();
-            Operation serverPrime = pair.getServerOperation();
-
-            clientNode.setServerOperation(serverPrime);
-            currNode.setClientOperation(clientPrime);
-            String key = UUID.randomUUID().toString();
-            OperationNode nextNode = new OperationNode(key);
-            clientNode.setServerNode(nextNode);
-            currNode.setClientNode(nextNode);
-            nextNode.setParentNodeFromServerOperation(clientNode);
-            nextNode.setParentNodeFromClientOperation(currNode);
-            currNode = nextNode;
-            parentNode = currNode.getParentNodeFromServerOperation();
-        }
-        currentClientNode = currNode;
-        currentServerNode = currNode;
-        return currNode;
     }
 }
