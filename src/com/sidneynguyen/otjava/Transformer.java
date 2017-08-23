@@ -95,7 +95,7 @@ public class Transformer {
         Operation parsedServerOperation = new Operation(serverOperation);
         int clientIndex = 0;
         int serverIndex = 0;
-        while (clientIndex < parsedClientOperation.size() || serverIndex < parsedServerOperation.size()) {
+        while (clientIndex < parsedClientOperation.size() && serverIndex < parsedServerOperation.size()) {
             OperationComponent clientComponent = parsedClientOperation.get(clientIndex);
             OperationComponent serverComponent = parsedServerOperation.get(serverIndex);
 
@@ -113,35 +113,81 @@ public class Transformer {
             serverComponent = parsedServerOperation.get(serverIndex);
             if (clientComponent.getOperationType() == OperationComponent.OP_COMP_INSERT) {
                 if (serverComponent.getOperationType() == OperationComponent.OP_COMP_INSERT) {
-
+                    if (clientComponent.getValue().compareTo(serverComponent.getValue()) < 0) {
+                        parsedClientOperation.add(clientIndex + 1, new OperationComponent(
+                                OperationComponent.OP_COMP_RETAIN,
+                                0,
+                                serverComponent.getValue(),
+                                serverComponent.getLength()
+                        ));
+                        parsedServerOperation.add(serverIndex, new OperationComponent(
+                                OperationComponent.OP_COMP_RETAIN,
+                                0,
+                                clientComponent.getValue(),
+                                clientComponent.getLength()
+                        ));
+                        clientIndex += 2;
+                        serverIndex += 2;
+                    } else {
+                        parsedClientOperation.add(clientIndex, new OperationComponent(
+                                OperationComponent.OP_COMP_RETAIN,
+                                0,
+                                serverComponent.getValue(),
+                                serverComponent.getLength()
+                        ));
+                        parsedServerOperation.add(serverIndex + 1, new OperationComponent(
+                                OperationComponent.OP_COMP_RETAIN,
+                                0,
+                                clientComponent.getValue(),
+                                clientComponent.getLength()
+                        ));
+                        clientIndex += 2;
+                        serverIndex += 2;
+                    }
                 } else if (serverComponent.getOperationType() == OperationComponent.OP_COMP_DELETE) {
-
+                    parsedServerOperation.add(serverIndex, new OperationComponent(
+                            OperationComponent.OP_COMP_RETAIN,
+                            0,
+                            clientComponent.getValue(),
+                            clientComponent.getLength()
+                    ));
                 } else {
 
                 }
             } else if (clientComponent.getOperationType() == OperationComponent.OP_COMP_DELETE) {
                 if (serverComponent.getOperationType() == OperationComponent.OP_COMP_INSERT) {
-
+                    clientIndex++;
+                    serverIndex++;
                 } else if (serverComponent.getOperationType() == OperationComponent.OP_COMP_DELETE) {
-
+                    parsedClientOperation.remove(clientIndex);
+                    parsedServerOperation.remove(serverIndex);
                 } else {
                     parsedServerOperation.remove(serverIndex);
                     clientIndex++;
                 }
             } else {
                 if (serverComponent.getOperationType() == OperationComponent.OP_COMP_INSERT) {
-                    parsedClientOperation.add(clientIndex, serverComponent);
+                    parsedClientOperation.add(clientIndex, new OperationComponent(
+                            OperationComponent.OP_COMP_RETAIN,
+                            clientComponent.getPosition(),
+                            serverComponent.getValue(),
+                            serverComponent.getLength()
+                    ));
                     clientIndex++;
-                    parsedClientOperation.shiftPositions(clientIndex, serverComponent.getLength());
                     serverIndex++;
                 } else if (serverComponent.getOperationType() == OperationComponent.OP_COMP_DELETE) {
-
+                    parsedClientOperation.remove(clientIndex);
+                    serverIndex++;
                 } else {
                     clientIndex++;
                     serverIndex++;
                 }
             }
         }
+        if (clientIndex < parsedClientOperation.size()) {
+
+        }
+
         OperationPair pair = new OperationPair(parsedClientOperation, parsedServerOperation);
         return pair;
     }

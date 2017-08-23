@@ -21,7 +21,7 @@ public class Document {
                 if (component.getValue().equals(data.substring(cursor, cursor + component.getLength()))) {
                     cursor += component.getLength();
                 } else {
-                    // TODO: Handle error
+                    throw new RuntimeException("Data corrupted");
                 }
             }
         }
