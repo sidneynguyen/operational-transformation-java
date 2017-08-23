@@ -65,4 +65,25 @@ public class DocumentTest {
 
         assertEquals("ABCVWXYZDEFGHIJK", document2.getData());
     }
+
+    @Test
+    public void applyOperation5() throws Exception {
+        Document document = new Document("ABC");
+        Operation operation = new Operation();
+        operation.add(new OperationComponent(OperationComponent.OP_COMP_RETAIN, 0, null, 3));
+        operation.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 3, "DE", 2));
+        document.applyOperation(operation);
+
+        assertEquals("ABCDE", document.getData());
+    }
+
+    @Test
+    public void applyOperation6() throws Exception {
+        Document document = new Document("ABC");
+        Operation operation = new Operation();
+        operation.add(new OperationComponent(OperationComponent.OP_COMP_DELETE, 0, "ABC", 3));
+        document.applyOperation(operation);
+
+        assertEquals("", document.getData());
+    }
 }

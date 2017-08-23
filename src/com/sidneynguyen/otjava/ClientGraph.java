@@ -17,6 +17,14 @@ public class ClientGraph {
         currentServerNode = rootNode;
     }
 
+    public OperationNode getCurrentClientNode() {
+        return currentClientNode;
+    }
+
+    public OperationNode getCurrentServerNode() {
+        return currentServerNode;
+    }
+
     public OperationNode insertClientOperation(Operation operation, String parentKey) {
         if (!currentClientNode.getHashKey().equals(parentKey)) {
             throw new RuntimeException("Operation is out-of-date");
@@ -69,8 +77,9 @@ public class ClientGraph {
         Operation serverOperation = parentNode.getServerOperation();
         OperationNode clientNode = parentNode.getClientNode();
         while (!parentNode.getHashKey().equals(currentClientNode.getHashKey())) {
-            /*Operation clientPrime = transformer.transform(clientOperation, serverOperation);
-            Operation serverPrime = transformer.transform(clientOperation, serverOperation);
+            OperationPair pair = transformer.transform(clientOperation, serverOperation);
+            Operation clientPrime = pair.getClientOperation();
+            Operation serverPrime = pair.getServerOperation();
 
             clientNode.setServerOperation(serverPrime);
             currNode.setClientOperation(clientPrime);
@@ -82,7 +91,6 @@ public class ClientGraph {
             nextNode.setParentNodeFromClientOperation(currNode);
             currNode = nextNode;
             parentNode = currNode.getParentNodeFromServerOperation();
-            */
         }
         currentClientNode = currNode;
         currentServerNode = currNode;
