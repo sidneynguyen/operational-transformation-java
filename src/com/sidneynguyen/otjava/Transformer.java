@@ -152,7 +152,14 @@ public class Transformer {
                             clientComponent.getLength()
                     ));
                 } else {
-
+                    parsedServerOperation.add(serverIndex, new OperationComponent(
+                            OperationComponent.OP_COMP_RETAIN,
+                            0,
+                            clientComponent.getValue(),
+                            clientComponent.getLength()
+                    ));
+                    clientIndex += 2;
+                    serverIndex += 2;
                 }
             } else if (clientComponent.getOperationType() == OperationComponent.OP_COMP_DELETE) {
                 if (serverComponent.getOperationType() == OperationComponent.OP_COMP_INSERT) {

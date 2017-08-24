@@ -52,6 +52,7 @@ public class ClientGraph {
         OperationNode clientNode = parentNode.getClientNode();
         while (!parentNode.getHashKey().equals(currentClientNode.getHashKey())) {
             OperationNode nextNode = new OperationNode(UUID.randomUUID().toString());
+            operationNodes.put(nextNode.getHashKey(), nextNode);
             OperationPair pair = transformer.transform(parentNode.getClientOperation(), parentNode.getServerOperation());
 
             clientNode.setServerOperation(pair.getServerOperation());
@@ -64,6 +65,7 @@ public class ClientGraph {
 
             serverNode = nextNode;
             parentNode = serverNode.getParentNodeFromServerOperation();
+            clientNode = parentNode.getClientNode();
         }
         currentClientNode = serverNode;
         return currentClientNode.getParentNodeFromServerOperation().getServerOperation();
