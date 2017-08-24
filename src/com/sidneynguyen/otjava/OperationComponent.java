@@ -47,4 +47,14 @@ public class OperationComponent {
     public void shiftPosition(int amount) {
         position += amount;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof OperationComponent)) {
+            return false;
+        }
+        OperationComponent component = (OperationComponent) obj;
+        return component.getOperationType() == operationType && component.getValue().equals(value)
+                && component.getLength() == length;
+    }
 }

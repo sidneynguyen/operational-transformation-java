@@ -53,4 +53,38 @@ public class Operation {
     public OperationComponent remove(int index) {
         return operationComponents.remove(index);
     }
+
+    public void simplify() {
+        for (int i = 0; i < operationComponents.size() - 1; ) {
+            if (operationComponents.get(i).getOperationType() == operationComponents.get(i + 1).getOperationType()) {
+                operationComponents.set(i, new OperationComponent(
+                        operationComponents.get(i).getOperationType(),
+                        operationComponents.get(i).getPosition(),
+                        operationComponents.get(i).getValue() + operationComponents.get(i + 1).getValue(),
+                        operationComponents.get(i).getLength() + operationComponents.get(i + 1). getLength()
+                ));
+                operationComponents.remove(i + 1);
+            } else {
+                i++;
+            }
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Operation) {
+            Operation operation = (Operation) obj;
+            if (operationComponents.size() != operation.size()) {
+                return false;
+            }
+            for (int i = 0; i < operationComponents.size(); i++) {
+                if (!operationComponents.get(i).equals(operation.get(i))) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

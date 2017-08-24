@@ -17,6 +17,10 @@ public class OperationNode {
         return hashKey;
     }
 
+    public void setHashKey(String hashKey) {
+        this.hashKey = hashKey;
+    }
+
     public Operation getClientOperation() {
         return clientOperation;
     }
