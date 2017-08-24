@@ -29,5 +29,4 @@ public class OperationTest {
 
         assertEquals(true, operation.equals(expectedOperation));
     }
-
 }

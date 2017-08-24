@@ -3,93 +3,7 @@ package com.sidneynguyen.otjava;
 import java.util.ArrayList;
 
 public class Transformer {
-    /*public Operation transform(Operation clientOperation, Operation serverOperation) {
-        Operation operation = new Operation();
-        Operation parsedClientOperation = new Operation(clientOperation);
-        Operation parsedServerOperation = new Operation(serverOperation);
-        for (int i = 0; i < Math.max(clientOperation.size(), serverOperation.size()); i++){
-            OperationComponent clientComponent = parsedClientOperation.get(i);
-            OperationComponent serverComponent = parsedServerOperation.get(i);
-            if (clientComponent.getPosition() != serverComponent.getPosition()) {
-                throw new RuntimeException("Error in parsing components");
-            }
-            if (clientComponent.getLength() > serverComponent.getLength()
-                    && clientComponent.getOperationType() != OperationComponent.OP_COMP_INSERT) {
-                parsedClientOperation.set(i, clientComponent.subOperation(0, serverComponent.getLength()));
-                parsedClientOperation.add(i + 1, clientComponent.subOperation(serverComponent.getLength(),
-                        clientComponent.getLength()));
-            } else if (clientComponent.getLength() < serverComponent.getLength()
-                    && serverComponent.getOperationType() != OperationComponent.OP_COMP_INSERT) {
-                parsedServerOperation.set(i, serverComponent.subOperation(0, clientComponent.getLength()));
-                parsedServerOperation.add(i + 1, serverComponent.subOperation(clientComponent.getLength(),
-                        serverComponent.getLength()));
-            }
-        }
-        if (clientOperation.size() != serverOperation.size()) {
-            throw new RuntimeException("Error in parsing components");
-        }
-        for (int i = 0; i < clientOperation.size(); i++) {
-            OperationComponent clientComponent = parsedClientOperation.get(i);
-            OperationComponent serverComponent = parsedServerOperation.get(i);
-            int clientOperationType = clientComponent.getOperationType();
-            int serverOperationType = serverComponent.getOperationType();
-            if (clientOperationType == serverOperationType) {
-                if (clientComponent.getOperationType() == OperationComponent.OP_COMP_INSERT) {
-                    if (clientComponent.getValue().compareTo(serverComponent.getValue()) < 0) {
-                        clientOperation.shiftPositions(i + 1, serverComponent.getLength());
-                        serverOperation.shiftPositions(i, clientComponent.getLength());
-                        operation.add(clientComponent);
-                        operation.add(serverComponent);
 
-                    } else {
-                        serverOperation.shiftPositions(i + 1, serverComponent.getLength());
-                        clientOperation.shiftPositions(i, serverComponent.getLength());
-                        operation.add(serverComponent);
-                        operation.add(clientComponent);
-                    }
-                } else if (clientComponent.getOperationType() == OperationComponent.OP_COMP_DELETE) {
-                    operation.add(clientComponent);
-                } else {
-                    operation.add(clientComponent);
-                }
-            } else {
-                if (clientOperationType == OperationComponent.OP_COMP_INSERT) {
-                    if (serverOperationType == OperationComponent.OP_COMP_DELETE) {
-                        clientOperation.shiftPositions(i + 1, -serverComponent.getLength());
-                        serverOperation.shiftPositions(i, clientComponent.getLength());
-                        operation.add(clientComponent);
-                        operation.add(serverComponent);
-                    } else {
-                        clientOperation.shiftPositions(i + 1, serverComponent.getLength());
-                        serverOperation.shiftPositions(i, clientComponent.getLength());
-                        operation.add(clientComponent);
-                        operation.add(serverComponent);
-                    }
-                } else if (clientOperationType == OperationComponent.OP_COMP_DELETE) {
-                    if (serverOperationType == OperationComponent.OP_COMP_INSERT) {
-                        serverOperation.shiftPositions(i + 1, -clientComponent.getLength());
-                        clientOperation.shiftPositions(i, serverComponent.getLength());
-                        operation.add(serverComponent);
-                        operation.add(clientComponent);
-                    } else {
-                        serverOperation.shiftPositions(i + 1, -clientComponent.getLength());
-                        operation.add(clientComponent);
-                    }
-                } else {
-                    if (serverOperationType == OperationComponent.OP_COMP_INSERT) {
-                        serverOperation.shiftPositions(i + 1, clientComponent.getLength());
-                        clientOperation.shiftPositions(i, serverComponent.getLength());
-                        operation.add(serverComponent);
-                        operation.add(clientComponent);
-                    } else {
-                        clientOperation.shiftPositions(i + 1, -serverComponent.getLength());
-                        operation.add(serverComponent);
-                    }
-                }
-            }
-        }
-        return operation;
-    }*/
     public OperationPair transform(Operation clientOperation, Operation serverOperation) {
         Operation parsedClientOperation = new Operation(clientOperation);
         Operation parsedServerOperation = new Operation(serverOperation);
@@ -158,8 +72,8 @@ public class Transformer {
                             clientComponent.getValue(),
                             clientComponent.getLength()
                     ));
-                    clientIndex += 2;
-                    serverIndex += 2;
+                    clientIndex++;
+                    serverIndex++;
                 }
             } else if (clientComponent.getOperationType() == OperationComponent.OP_COMP_DELETE) {
                 if (serverComponent.getOperationType() == OperationComponent.OP_COMP_INSERT) {
@@ -192,9 +106,39 @@ public class Transformer {
             }
         }
         if (clientIndex < parsedClientOperation.size()) {
-
+            while (clientIndex < parsedClientOperation.size()) {
+                OperationComponent operation = parsedClientOperation.get(clientIndex);
+                if (operation.getOperationType() == OperationComponent.OP_COMP_INSERT) {
+                    parsedServerOperation.add(new OperationComponent(
+                            OperationComponent.OP_COMP_RETAIN,
+                            0,
+                            operation.getValue(),
+                            operation.getLength()
+                    ));
+                    clientIndex++;
+                } else {
+                    throw new RuntimeException("Uh oh");
+                }
+            }
+        } else if (serverIndex < parsedServerOperation.size()) {
+            while (serverIndex < parsedServerOperation.size()) {
+                OperationComponent operation = parsedServerOperation.get(clientIndex);
+                if (operation.getOperationType() == OperationComponent.OP_COMP_INSERT) {
+                    parsedClientOperation.add(new OperationComponent(
+                            OperationComponent.OP_COMP_RETAIN,
+                            0,
+                            operation.getValue(),
+                            operation.getLength()
+                    ));
+                    serverIndex++;
+                } else {
+                    throw new RuntimeException("Uh oh");
+                }
+            }
         }
 
+        parsedClientOperation.simplify();
+        parsedServerOperation.simplify();
         OperationPair pair = new OperationPair(parsedClientOperation, parsedServerOperation);
         return pair;
     }

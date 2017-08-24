@@ -10,12 +10,18 @@ public class ClientDriver {
     private LinkedList<Operation> clientOperations;
     private LinkedList<ServerOperation> serverOperations;
 
-    public ClientDriver(String data, String key) {
+    private OperationNode sentOperation;
+
+    public ClientDriver(String data, String key, String uuid) {
         document = new Document(data);
-        clientGraph = new ClientGraph(key);
+        clientGraph = new ClientGraph(key, uuid);
 
         clientOperations = new LinkedList<>();
         serverOperations = new LinkedList<>();
+    }
+
+    public void sendClientOperataion() {
+
     }
 
     public void enqueueClientOperation(Operation operation) {
@@ -30,9 +36,11 @@ public class ClientDriver {
         if (!serverOperations.isEmpty()) {
             ServerOperation serverOperation = serverOperations.removeFirst();
             clientGraph.insertServerOperation(serverOperation.getOperation(), serverOperation.getKey(),
-                    serverOperation.getParentKey());
+                    serverOperation.getParentKey(), serverOperation.getUuid());
             Operation operation = clientGraph.applyServerOperation();
-            document.applyOperation(operation);
+            if (operation != null) {
+                document.applyOperation(operation);
+            }
         } else if (!clientOperations.isEmpty()) {
             Operation operation = clientGraph.insertClientOperation(clientOperations.removeFirst(),
                     clientGraph.getCurrentClientNode().getHashKey());
