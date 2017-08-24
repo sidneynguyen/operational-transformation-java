@@ -12,16 +12,17 @@ public class ClientDriver {
 
     private OperationNode sentOperation;
 
-    public ClientDriver(String data, String key, String uuid) {
+    public ClientDriver(String data, String key) {
         document = new Document(data);
-        clientGraph = new ClientGraph(key, uuid);
+        clientGraph = new ClientGraph(key);
 
         clientOperations = new LinkedList<>();
         serverOperations = new LinkedList<>();
     }
 
-    public void sendClientOperataion() {
-
+    public void sendClientOperation() {
+        Operation operation = clientGraph.generateClientOperationForServer();
+        clientGraph.setSentOperationKey(clientGraph.getCurrentClientNode().getHashKey());
     }
 
     public void enqueueClientOperation(Operation operation) {
@@ -36,7 +37,7 @@ public class ClientDriver {
         if (!serverOperations.isEmpty()) {
             ServerOperation serverOperation = serverOperations.removeFirst();
             clientGraph.insertServerOperation(serverOperation.getOperation(), serverOperation.getKey(),
-                    serverOperation.getParentKey(), serverOperation.getUuid());
+                    serverOperation.getParentKey());
             Operation operation = clientGraph.applyServerOperation();
             if (operation != null) {
                 document.applyOperation(operation);
@@ -44,6 +45,22 @@ public class ClientDriver {
         } else if (!clientOperations.isEmpty()) {
             Operation operation = clientGraph.insertClientOperation(clientOperations.removeFirst(),
                     clientGraph.getCurrentClientNode().getHashKey());
+            document.applyOperation(operation);
+        }
+    }
+
+    public void processChange(String key) {
+        if (!serverOperations.isEmpty()) {
+            ServerOperation serverOperation = serverOperations.removeFirst();
+            clientGraph.insertServerOperation(serverOperation.getOperation(), serverOperation.getKey(),
+                    serverOperation.getParentKey());
+            Operation operation = clientGraph.applyServerOperation();
+            if (operation != null) {
+                document.applyOperation(operation);
+            }
+        } else if (!clientOperations.isEmpty()) {
+            Operation operation = clientGraph.insertClientOperation(clientOperations.removeFirst(),
+                    clientGraph.getCurrentClientNode().getHashKey(), key);
             document.applyOperation(operation);
         }
     }

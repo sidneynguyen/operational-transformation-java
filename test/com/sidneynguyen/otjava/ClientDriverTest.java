@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 public class ClientDriverTest {
     @Test
     public void processChange1() throws Exception {
-        ClientDriver driver = new ClientDriver("go", "ABC", "1234");
+        ClientDriver driver = new ClientDriver("go", "ABC");
 
         Operation clientOp = new Operation();
         clientOp.add(new OperationComponent(OperationComponent.OP_COMP_RETAIN, 0, "go", 2));
@@ -18,8 +18,7 @@ public class ClientDriverTest {
         Operation serverOp = new Operation();
         serverOp.add(new OperationComponent(OperationComponent.OP_COMP_RETAIN, 0, "go", 2));
         serverOp.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 2, "t", 1));
-        ServerOperation serverOperation = new ServerOperation(serverOp, UUID.randomUUID().toString(), "ABC",
-                UUID.randomUUID().toString());
+        ServerOperation serverOperation = new ServerOperation(serverOp, UUID.randomUUID().toString(), "ABC");
 
         driver.enqueueClientOperation(clientOp);
         driver.processChange();
@@ -33,13 +32,12 @@ public class ClientDriverTest {
 
     @Test
     public void processChange2() throws Exception {
-        ClientDriver driver = new ClientDriver("go", "ABC", "1234");
+        ClientDriver driver = new ClientDriver("go", "ABC");
 
         Operation serverOp = new Operation();
         serverOp.add(new OperationComponent(OperationComponent.OP_COMP_RETAIN, 0, "go", 2));
         serverOp.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 2, "t", 1));
-        ServerOperation serverOperation = new ServerOperation(serverOp, UUID.randomUUID().toString(), "ABC",
-                UUID.randomUUID().toString());
+        ServerOperation serverOperation = new ServerOperation(serverOp, UUID.randomUUID().toString(), "ABC");
 
         driver.enqueueServerOperation(serverOperation);
         driver.processChange();
@@ -57,7 +55,7 @@ public class ClientDriverTest {
 
     @Test
     public void processChange3() throws Exception {
-        ClientDriver driver = new ClientDriver("", "ABC", "1234");
+        ClientDriver driver = new ClientDriver("", "ABC");
 
         Operation clientOp1 = new Operation();
         clientOp1.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 0, "A", 1));
@@ -78,8 +76,7 @@ public class ClientDriverTest {
 
         Operation serverOp1 = new Operation();
         serverOp1.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 0, "C", 1));
-        ServerOperation serverOperation1 = new ServerOperation(serverOp1, "XYZ", "ABC",
-                UUID.randomUUID().toString());
+        ServerOperation serverOperation1 = new ServerOperation(serverOp1, "XYZ", "ABC");
 
         driver.enqueueServerOperation(serverOperation1);
         driver.processChange();
@@ -89,8 +86,7 @@ public class ClientDriverTest {
         Operation serverOp2 = new Operation();
         serverOp2.add(new OperationComponent(OperationComponent.OP_COMP_RETAIN, 0, "C", 1));
         serverOp2.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 1, "D", 1));
-        ServerOperation serverOperation2 = new ServerOperation(serverOp2, "WWW", "XYZ",
-                UUID.randomUUID().toString());
+        ServerOperation serverOperation2 = new ServerOperation(serverOp2, "WWW", "XYZ");
 
         driver.enqueueServerOperation(serverOperation2);
         driver.processChange();
@@ -100,7 +96,7 @@ public class ClientDriverTest {
 
     @Test
     public void processChange4() throws Exception {
-        ClientDriver driver = new ClientDriver("", "ABC", "1234");
+        ClientDriver driver = new ClientDriver("", "ABC");
 
         Operation clientOp1 = new Operation();
         clientOp1.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 0, "A", 1));
@@ -121,8 +117,7 @@ public class ClientDriverTest {
 
         Operation serverOp1 = new Operation();
         serverOp1.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 0, "C", 1));
-        ServerOperation serverOperation1 = new ServerOperation(serverOp1, "XYZ", "ABC",
-                UUID.randomUUID().toString());
+        ServerOperation serverOperation1 = new ServerOperation(serverOp1, "XYZ", "ABC");
 
         driver.enqueueServerOperation(serverOperation1);
         driver.processChange();
@@ -141,8 +136,7 @@ public class ClientDriverTest {
         Operation serverOp2 = new Operation();
         serverOp2.add(new OperationComponent(OperationComponent.OP_COMP_RETAIN, 0, "C", 1));
         serverOp2.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 1, "E", 1));
-        ServerOperation serverOperation2 = new ServerOperation(serverOp2, "WWW", "XYZ",
-                UUID.randomUUID().toString());
+        ServerOperation serverOperation2 = new ServerOperation(serverOp2, "WWW", "XYZ");
 
         driver.enqueueServerOperation(serverOperation2);
         driver.processChange();
@@ -152,13 +146,15 @@ public class ClientDriverTest {
 
     @Test
     public void processChange5() throws Exception {
-        ClientDriver driver = new ClientDriver("", "ABC", "1234");
+        ClientDriver driver = new ClientDriver("", "ABC");
 
         Operation clientOp1 = new Operation();
         clientOp1.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 0, "A", 1));
 
         driver.enqueueClientOperation(clientOp1);
-        driver.processChange();
+        driver.processChange("1234");
+
+        driver.sendClientOperation();
 
         assertEquals("A", driver.getDocument().getData());
 
@@ -173,8 +169,7 @@ public class ClientDriverTest {
 
         Operation serverOp1 = new Operation();
         serverOp1.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 0, "C", 1));
-        ServerOperation serverOperation1 = new ServerOperation(serverOp1, "XYZ", "ABC",
-                UUID.randomUUID().toString());
+        ServerOperation serverOperation1 = new ServerOperation(serverOp1, "XYZ", "ABC");
 
         driver.enqueueServerOperation(serverOperation1);
         driver.processChange();
@@ -193,8 +188,7 @@ public class ClientDriverTest {
         Operation serverOp2 = new Operation();
         serverOp2.add(new OperationComponent(OperationComponent.OP_COMP_RETAIN, 0, "C", 1));
         serverOp2.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 1, "E", 1));
-        ServerOperation serverOperation2 = new ServerOperation(serverOp2, "WWW", "XYZ",
-                UUID.randomUUID().toString());
+        ServerOperation serverOperation2 = new ServerOperation(serverOp2, "WWW", "XYZ");
 
         driver.enqueueServerOperation(serverOperation2);
         driver.processChange();
@@ -204,8 +198,7 @@ public class ClientDriverTest {
         Transformer transformer = new Transformer();
         OperationPair pair3 = transformer.transform(clientOp1, serverOp1);
         Operation serverOp3 = transformer.transform(pair3.getClientOperation(), serverOp2).getClientOperation();
-        ServerOperation serverOperation3 = new ServerOperation(serverOp3, UUID.randomUUID().toString(), "WWW",
-                "1234");
+        ServerOperation serverOperation3 = new ServerOperation(serverOp3, "1234", "WWW");
 
         driver.enqueueServerOperation(serverOperation3);
         driver.processChange();

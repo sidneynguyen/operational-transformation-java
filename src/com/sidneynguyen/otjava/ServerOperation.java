@@ -4,13 +4,11 @@ public class ServerOperation {
     private Operation operation;
     private String key;
     private String parentKey;
-    private String uuid;
 
-    public ServerOperation(Operation operation, String key, String parentKey, String uuid) {
+    public ServerOperation(Operation operation, String key, String parentKey) {
         this.operation = operation;
         this.key = key;
         this.parentKey = parentKey;
-        this.uuid = uuid;
     }
 
     public Operation getOperation() {
@@ -23,9 +21,5 @@ public class ServerOperation {
 
     public String getParentKey() {
         return parentKey;
-    }
-
-    public String getUuid() {
-        return uuid;
     }
 }

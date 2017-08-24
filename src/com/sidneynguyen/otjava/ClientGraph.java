@@ -8,24 +8,28 @@ public class ClientGraph {
     private OperationNode currentClientNode;
     private OperationNode currentServerNode;
     private Transformer transformer;
-    private String uuid;
+    private Composer composer;
+    private String sentOperationKey;
 
-    public ClientGraph(String key, String uuid) {
+    public ClientGraph(String key) {
         OperationNode rootNode = new OperationNode(key);
         operationNodes = new Hashtable<>();
         operationNodes.put(rootNode.getHashKey(), rootNode);
         currentClientNode = rootNode;
         currentServerNode = rootNode;
         transformer = new Transformer();
-        this.uuid = uuid;
+        composer = new Composer();
     }
 
     public Operation generateClientOperationForServer() {
-        OperationNode node = currentClientNode;
+        OperationNode node = currentServerNode;
+        Operation operation = node.getClientOperation();
+        node = node.getClientNode();
         while (node.getClientNode() != null) {
-            // TODO
+            operation = composer.compose(operation, node.getClientOperation());
+            node = node.getClientNode();
         }
-        return null;
+        return operation;
     }
 
     public Operation insertClientOperation(Operation operation, String parentKey) {
@@ -41,14 +45,25 @@ public class ClientGraph {
         return operation;
     }
 
-    public void insertServerOperation(Operation operation, String key, String parentKey, String uuid) {
+    public Operation insertClientOperation(Operation operation, String parentKey, String key) {
+        if (!currentClientNode.getHashKey().equals(parentKey)) {
+            throw new RuntimeException("Operation is out-of-date");
+        }
+        OperationNode node = new OperationNode(key);
+        node.setParentNodeFromClientOperation(currentClientNode);
+        currentClientNode.setClientNode(node);
+        currentClientNode.setClientOperation(operation);
+        operationNodes.put(node.getHashKey(), node);
+        currentClientNode = node;
+        return operation;
+    }
+
+    public void insertServerOperation(Operation operation, String key, String parentKey) {
         if (!currentServerNode.getHashKey().equals(parentKey)) {
             throw new RuntimeException("Operation is out-of-date");
         }
-        // TODO: may receive composite operation
-        if (uuid.equals(this.uuid)) {
-            currentServerNode = currentServerNode.getClientNode();
-            currentServerNode.setHashKey(key);
+        if (key.equals(sentOperationKey)) {
+            currentServerNode = operationNodes.get(key);
             return;
         }
 
@@ -94,5 +109,9 @@ public class ClientGraph {
 
     public OperationNode getCurrentServerNode() {
         return currentServerNode;
+    }
+
+    public void setSentOperationKey(String sentOperationKey) {
+        this.sentOperationKey = sentOperationKey;
     }
 }
