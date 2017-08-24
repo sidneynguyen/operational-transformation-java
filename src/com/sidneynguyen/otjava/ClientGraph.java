@@ -29,6 +29,7 @@ public class ClientGraph {
             operation = composer.compose(operation, node.getClientOperation());
             node = node.getClientNode();
         }
+        operation.simplify();
         return operation;
     }
 

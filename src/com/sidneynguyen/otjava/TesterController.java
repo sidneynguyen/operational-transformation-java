@@ -32,15 +32,21 @@ public class TesterController {
 
     @FXML
     protected void handleClient1PushButtonAction(ActionEvent event) {
-        String text = client1TextArea.getText();
-        if (text.equals(clientDriver1.getDocument().getData())) {
-            return;
+        String client1Text = client1TextArea.getText();
+        if (!client1Text.equals(clientDriver1.getDocument().getData())) {
+            Operation operation = clientDriver1.getOperationFromEdit(client1Text);
+            clientDriver1.enqueueClientOperation(operation);
+            clientDriver1.processChange();
+            client1TextArea.setText(clientDriver1.getDocument().getData());
         }
 
-        Operation operation = clientDriver1.getOperationFromEdit(text);
-        clientDriver1.enqueueClientOperation(operation);
-        clientDriver1.processChange();
-        client1TextArea.setText(clientDriver1.getDocument().getData());
+        String client2Text = client2TextArea.getText();
+        if (!client2Text.equals(clientDriver2.getDocument().getData())) {
+            Operation op2 = clientDriver2.getOperationFromEdit(client2Text);
+            clientDriver2.enqueueClientOperation(op2);
+            clientDriver2.processChange();
+            client2TextArea.setText(clientDriver2.getDocument().getData());
+        }
 
         ServerOperation clientOperation = clientDriver1.sendClientOperationToServer();
         serverDriver.enqueueClientOperation(clientOperation);
@@ -52,28 +58,27 @@ public class TesterController {
         clientDriver1.enqueueServerOperation(serverOperation);
         clientDriver1.processChange();
 
-        String client2Text = client2TextArea.getText();
-        if (!client2Text.equals(clientDriver2.getDocument().getData())) {
-            Operation op2 = clientDriver2.getOperationFromEdit(client2Text);
-            clientDriver2.enqueueClientOperation(op2);
-            clientDriver2.processChange();
-        }
-
         clientDriver2.enqueueServerOperation(serverOperation);
         clientDriver2.processChange();
     }
 
     @FXML
     protected void handleClient2PushButtonAction(ActionEvent event) {
-        String text = client2TextArea.getText();
-        if (text.equals(clientDriver2.getDocument().getData())) {
-            return;
+        String client2Text = client2TextArea.getText();
+        if (!client2Text.equals(clientDriver2.getDocument().getData())) {
+            Operation operation = clientDriver2.getOperationFromEdit(client2Text);
+            clientDriver2.enqueueClientOperation(operation);
+            clientDriver2.processChange();
+            client2TextArea.setText(clientDriver2.getDocument().getData());
         }
 
-        Operation operation = clientDriver2.getOperationFromEdit(text);
-        clientDriver2.enqueueClientOperation(operation);
-        clientDriver2.processChange();
-        client2TextArea.setText(clientDriver2.getDocument().getData());
+        String client1Text = client1TextArea.getText();
+        if (!client1Text.equals(clientDriver1.getDocument().getData())) {
+            Operation operation = clientDriver1.getOperationFromEdit(client1Text);
+            clientDriver1.enqueueClientOperation(operation);
+            clientDriver1.processChange();
+            client1TextArea.setText(clientDriver1.getDocument().getData());
+        }
 
         ServerOperation clientOperation = clientDriver2.sendClientOperationToServer();
         serverDriver.enqueueClientOperation(clientOperation);
@@ -84,12 +89,6 @@ public class TesterController {
         ServerOperation serverOperation = serverDriver.sendServerOperationToClient();
         clientDriver2.enqueueServerOperation(serverOperation);
         clientDriver2.processChange();
-
-        String client1Text = client1TextArea.getText();
-        if (!client1Text.equals(clientDriver1.getDocument().getData())) {
-            clientDriver1.enqueueClientOperation(clientDriver1.getOperationFromEdit(client1Text));
-            clientDriver1.processChange();
-        }
 
         clientDriver1.enqueueServerOperation(serverOperation);
         clientDriver1.processChange();
