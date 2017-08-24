@@ -51,6 +51,14 @@ public class TesterController {
         ServerOperation serverOperation = serverDriver.sendServerOperationToClient();
         clientDriver1.enqueueServerOperation(serverOperation);
         clientDriver1.processChange();
+
+        String client2Text = client2TextArea.getText();
+        if (!client2Text.equals(clientDriver2.getDocument().getData())) {
+            Operation op2 = clientDriver2.getOperationFromEdit(client2Text);
+            clientDriver2.enqueueClientOperation(op2);
+            clientDriver2.processChange();
+        }
+
         clientDriver2.enqueueServerOperation(serverOperation);
         clientDriver2.processChange();
     }
@@ -74,10 +82,17 @@ public class TesterController {
         serverDocumentLabel.setText(serverDriver.getDocument().getData());
 
         ServerOperation serverOperation = serverDriver.sendServerOperationToClient();
-        clientDriver1.enqueueServerOperation(serverOperation);
-        clientDriver1.processChange();
         clientDriver2.enqueueServerOperation(serverOperation);
         clientDriver2.processChange();
+
+        String client1Text = client1TextArea.getText();
+        if (!client1Text.equals(clientDriver1.getDocument().getData())) {
+            clientDriver1.enqueueClientOperation(clientDriver1.getOperationFromEdit(client1Text));
+            clientDriver1.processChange();
+        }
+
+        clientDriver1.enqueueServerOperation(serverOperation);
+        clientDriver1.processChange();
     }
 
     @FXML

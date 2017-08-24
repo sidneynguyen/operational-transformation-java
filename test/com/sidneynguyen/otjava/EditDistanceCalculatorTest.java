@@ -38,4 +38,16 @@ public class EditDistanceCalculatorTest {
         assertEquals("POLITICIAN", document.getData());
     }
 
+    @Test
+    public void getEdits3() throws Exception {
+        EditDistanceCalculator calculator = new EditDistanceCalculator();
+        int[][] e = calculator.getLevenshteinMatrix("Hello", "aHello");
+        Operation operation = calculator.getEdits(e, "Hello", "aHello");
+        operation.simplify();
+
+        Document document = new Document("Hello");
+        document.applyOperation(operation);
+
+        assertEquals("aHello", document.getData());
+    }
 }

@@ -105,6 +105,24 @@ public class EditDistanceCalculator {
                 i--;
             }
         }
+        while (i > 0) {
+            components.addFirst(new OperationComponent(
+                    OperationComponent.OP_COMP_DELETE,
+                    0,
+                    "" + x.charAt(i - 1),
+                    1
+            ));
+            i--;
+        }
+        while (j > 0) {
+            components.addFirst(new OperationComponent(
+                    OperationComponent.OP_COMP_INSERT,
+                    0,
+                    "" + y.charAt(j - 1),
+                    1
+            ));
+            j--;
+        }
         Operation operation = new Operation(new ArrayList<>(components));
         return operation;
     }
