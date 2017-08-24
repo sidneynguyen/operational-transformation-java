@@ -154,7 +154,7 @@ public class ClientDriverTest {
         driver.enqueueClientOperation(clientOp1);
         driver.processChange("1234");
 
-        driver.sendClientOperation();
+        driver.sendClientOperationToServer();
 
         assertEquals("A", driver.getDocument().getData());
 

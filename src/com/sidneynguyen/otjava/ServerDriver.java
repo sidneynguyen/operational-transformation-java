@@ -28,6 +28,10 @@ public class ServerDriver {
         }
     }
 
+    public ServerOperation sendServerOperationToClient() {
+        return serverGraph.getCurrentOperationToSend();
+    }
+
     public Document getDocument() {
         return document;
     }

@@ -64,6 +64,7 @@ public class ClientGraph {
         }
         if (key.equals(sentOperationKey)) {
             currentServerNode = operationNodes.get(key);
+            sentOperationKey = null;
             return;
         }
 
@@ -77,6 +78,9 @@ public class ClientGraph {
 
     public Operation applyServerOperation() {
         if (currentServerNode.getClientNode() != null) {
+            return null;
+        }
+        if (currentServerNode.getHashKey().equals(currentClientNode.getHashKey())) {
             return null;
         }
         OperationNode serverNode = currentServerNode;

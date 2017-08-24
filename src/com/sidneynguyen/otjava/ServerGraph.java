@@ -6,17 +6,14 @@ import java.util.UUID;
 
 public class ServerGraph {
     private Hashtable<String, OperationNode> operationNodes;
-    private OperationNode currentNodeToSend;
+    private ServerOperation currentOperationToSend;
     private Transformer transformer;
-    private Composer composer;
 
     public ServerGraph(String key) {
         OperationNode rootNode = new OperationNode(key);
         operationNodes = new Hashtable<>();
         operationNodes.put(rootNode.getHashKey(), rootNode);
-        currentNodeToSend = rootNode;
         transformer = new Transformer();
-        composer = new Composer();
     }
 
     public OperationNode insertClientOperation(Operation operation, String key, String parentKey) {
@@ -55,8 +52,12 @@ public class ServerGraph {
         parentNode.setServerNode(clientNode);
         parentNode.setServerOperation(operation);
         clientNode.setParentNodeFromServerOperation(parentNode);
-        currentNodeToSend = clientNode;
+        currentOperationToSend = new ServerOperation(operation, clientNode.getHashKey(), parentNode.getHashKey());
         operationNodes.put(clientNode.getHashKey(), clientNode);
         return operation;
+    }
+
+    public ServerOperation getCurrentOperationToSend() {
+        return currentOperationToSend;
     }
 }

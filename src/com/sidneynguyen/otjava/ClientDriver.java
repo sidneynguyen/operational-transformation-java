@@ -12,17 +12,28 @@ public class ClientDriver {
 
     private OperationNode sentOperation;
 
+    private EditDistanceCalculator editDistanceCalculator;
+
     public ClientDriver(String data, String key) {
         document = new Document(data);
         clientGraph = new ClientGraph(key);
 
         clientOperations = new LinkedList<>();
         serverOperations = new LinkedList<>();
+
+        editDistanceCalculator = new EditDistanceCalculator();
     }
 
-    public void sendClientOperation() {
+    public ServerOperation sendClientOperationToServer() {
         Operation operation = clientGraph.generateClientOperationForServer();
         clientGraph.setSentOperationKey(clientGraph.getCurrentClientNode().getHashKey());
+        return new ServerOperation(operation, clientGraph.getCurrentClientNode().getHashKey(),
+                clientGraph.getCurrentServerNode().getHashKey());
+    }
+
+    public Operation getOperationFromEdit(String edit) {
+        int[][] e = editDistanceCalculator.getLevenshteinMatrix(document.getData(), edit);
+        return editDistanceCalculator.getEdits(e, document.getData(), edit);
     }
 
     public void enqueueClientOperation(Operation operation) {

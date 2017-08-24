@@ -56,6 +56,22 @@ public class EditDistanceCalculator {
         int i = x.length();
         int j = y.length();
         LinkedList<OperationComponent> components = new LinkedList<>();
+        if (i == 0 && j > 0) {
+            components.addFirst(new OperationComponent(
+                    OperationComponent.OP_COMP_INSERT,
+                    0,
+                    y,
+                    j
+            ));
+        }
+        if (j == 0 && i > 0) {
+            components.addFirst(new OperationComponent(
+                    OperationComponent.OP_COMP_INSERT,
+                    0,
+                    x,
+                    i
+            ));
+        }
         while (i != 0 && j != 0) {
             int current = e[i][j];
             int diagonal = e[i - 1][j - 1];
