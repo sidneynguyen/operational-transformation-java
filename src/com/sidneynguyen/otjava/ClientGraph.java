@@ -116,6 +116,10 @@ public class ClientGraph {
         return currentServerNode;
     }
 
+    public String getSentOperationKey() {
+        return sentOperationKey;
+    }
+
     public void setSentOperationKey(String sentOperationKey) {
         this.sentOperationKey = sentOperationKey;
     }

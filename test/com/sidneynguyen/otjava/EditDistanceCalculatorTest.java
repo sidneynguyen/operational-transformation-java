@@ -50,4 +50,17 @@ public class EditDistanceCalculatorTest {
 
         assertEquals("aHello", document.getData());
     }
+
+    @Test
+    public void getEdits4() throws Exception {
+        EditDistanceCalculator calculator = new EditDistanceCalculator();
+        int[][] e = calculator.getLevenshteinMatrix("Hello", "");
+        Operation operation = calculator.getEdits(e, "Hello", "");
+        operation.simplify();
+
+        Document document = new Document("Hello");
+        document.applyOperation(operation);
+
+        assertEquals("", document.getData());
+    }
 }

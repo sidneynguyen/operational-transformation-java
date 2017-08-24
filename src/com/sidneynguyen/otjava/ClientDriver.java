@@ -25,6 +25,9 @@ public class ClientDriver {
     }
 
     public ServerOperation sendClientOperationToServer() {
+        while (!serverOperations.isEmpty()) {
+            processChange();
+        }
         Operation operation = clientGraph.generateClientOperationForServer();
         clientGraph.setSentOperationKey(clientGraph.getCurrentClientNode().getHashKey());
         return new ServerOperation(operation, clientGraph.getCurrentClientNode().getHashKey(),
@@ -74,6 +77,14 @@ public class ClientDriver {
                     clientGraph.getCurrentClientNode().getHashKey(), key);
             document.applyOperation(operation);
         }
+    }
+
+    public boolean canProcess() {
+        return !clientOperations.isEmpty() || !serverOperations.isEmpty();
+    }
+
+    public boolean canSendOperationToServer() {
+        return clientGraph.getSentOperationKey() == null;
     }
 
     public Document getDocument() {

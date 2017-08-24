@@ -63,14 +63,18 @@ public class EditDistanceCalculator {
                     y,
                     j
             ));
+            Operation operation = new Operation(new ArrayList<>(components));
+            return operation;
         }
         if (j == 0 && i > 0) {
             components.addFirst(new OperationComponent(
-                    OperationComponent.OP_COMP_INSERT,
+                    OperationComponent.OP_COMP_DELETE,
                     0,
                     x,
                     i
             ));
+            Operation operation = new Operation(new ArrayList<>(components));
+            return operation;
         }
         while (i != 0 && j != 0) {
             int current = e[i][j];

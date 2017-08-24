@@ -36,7 +36,9 @@ public class TesterController {
         if (!client1Text.equals(clientDriver1.getDocument().getData())) {
             Operation operation = clientDriver1.getOperationFromEdit(client1Text);
             clientDriver1.enqueueClientOperation(operation);
-            clientDriver1.processChange();
+            while (clientDriver1.canProcess()) {
+                clientDriver1.processChange();
+            }
             client1TextArea.setText(clientDriver1.getDocument().getData());
         }
 
@@ -44,8 +46,14 @@ public class TesterController {
         if (!client2Text.equals(clientDriver2.getDocument().getData())) {
             Operation op2 = clientDriver2.getOperationFromEdit(client2Text);
             clientDriver2.enqueueClientOperation(op2);
-            clientDriver2.processChange();
+            while (clientDriver2.canProcess()) {
+                clientDriver2.processChange();
+            }
             client2TextArea.setText(clientDriver2.getDocument().getData());
+        }
+
+        if (!clientDriver1.canSendOperationToServer()) {
+            return;
         }
 
         ServerOperation clientOperation = clientDriver1.sendClientOperationToServer();
@@ -59,7 +67,6 @@ public class TesterController {
         clientDriver1.processChange();
 
         clientDriver2.enqueueServerOperation(serverOperation);
-        clientDriver2.processChange();
     }
 
     @FXML
@@ -68,7 +75,9 @@ public class TesterController {
         if (!client2Text.equals(clientDriver2.getDocument().getData())) {
             Operation operation = clientDriver2.getOperationFromEdit(client2Text);
             clientDriver2.enqueueClientOperation(operation);
-            clientDriver2.processChange();
+            while (clientDriver2.canProcess()) {
+                clientDriver2.processChange();
+            }
             client2TextArea.setText(clientDriver2.getDocument().getData());
         }
 
@@ -76,8 +85,14 @@ public class TesterController {
         if (!client1Text.equals(clientDriver1.getDocument().getData())) {
             Operation operation = clientDriver1.getOperationFromEdit(client1Text);
             clientDriver1.enqueueClientOperation(operation);
-            clientDriver1.processChange();
+            while (clientDriver1.canProcess()) {
+                clientDriver1.processChange();
+            }
             client1TextArea.setText(clientDriver1.getDocument().getData());
+        }
+
+        if (!clientDriver2.canSendOperationToServer()) {
+            return;
         }
 
         ServerOperation clientOperation = clientDriver2.sendClientOperationToServer();
@@ -91,16 +106,17 @@ public class TesterController {
         clientDriver2.processChange();
 
         clientDriver1.enqueueServerOperation(serverOperation);
-        clientDriver1.processChange();
     }
 
     @FXML
     protected void handleClient1PullButtonAction(ActionEvent event) {
+        clientDriver1.processChange();
         client1TextArea.setText(clientDriver1.getDocument().getData());
     }
 
     @FXML
     protected void handleClient2PullButtonAction(ActionEvent event) {
+        clientDriver2.processChange();
         client2TextArea.setText(clientDriver2.getDocument().getData());
     }
 }
