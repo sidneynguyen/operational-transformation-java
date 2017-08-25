@@ -1,3 +1,6 @@
+/**
+ * Models a document.
+ */
 public class Document {
     private String data;
 
@@ -5,6 +8,10 @@ public class Document {
         this.data = data;
     }
 
+    /**
+     * Applies an operation onto the document.
+     * @param operation     the operation to apply
+     */
     public void applyOperation(Operation operation) {
         int cursor = 0;
         String appliedData = "";

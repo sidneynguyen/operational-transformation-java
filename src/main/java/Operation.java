@@ -1,5 +1,9 @@
 import java.util.ArrayList;
 
+/**
+ * Models an operation.
+ * An operation is a list of operation components;
+ */
 public class Operation {
     private ArrayList<OperationComponent> operationComponents;
 
@@ -13,6 +17,24 @@ public class Operation {
 
     public Operation(Operation operation) {
         operationComponents = new ArrayList<>(operation.getOperationComponents());
+    }
+
+    /**
+     * Combines adjacent operation components with matching operation types.
+     */
+    public void simplify() {
+        for (int i = 0; i < operationComponents.size() - 1; ) {
+            if (operationComponents.get(i).getOperationType() == operationComponents.get(i + 1).getOperationType()) {
+                operationComponents.set(i, new OperationComponent(
+                        operationComponents.get(i).getOperationType(),
+                        operationComponents.get(i).getValue() + operationComponents.get(i + 1).getValue(),
+                        operationComponents.get(i).getLength() + operationComponents.get(i + 1). getLength()
+                ));
+                operationComponents.remove(i + 1);
+            } else {
+                i++;
+            }
+        }
     }
 
     public ArrayList<OperationComponent> getOperationComponents() {
@@ -41,21 +63,6 @@ public class Operation {
 
     public OperationComponent remove(int index) {
         return operationComponents.remove(index);
-    }
-
-    public void simplify() {
-        for (int i = 0; i < operationComponents.size() - 1; ) {
-            if (operationComponents.get(i).getOperationType() == operationComponents.get(i + 1).getOperationType()) {
-                operationComponents.set(i, new OperationComponent(
-                        operationComponents.get(i).getOperationType(),
-                        operationComponents.get(i).getValue() + operationComponents.get(i + 1).getValue(),
-                        operationComponents.get(i).getLength() + operationComponents.get(i + 1). getLength()
-                ));
-                operationComponents.remove(i + 1);
-            } else {
-                i++;
-            }
-        }
     }
 
     @Override

@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class Transformer {
 
     public OperationPair transform(Operation clientOperation, Operation serverOperation) {
@@ -12,12 +10,12 @@ public class Transformer {
             OperationComponent serverComponent = parsedServerOperation.get(serverIndex);
 
             if (clientComponent.getLength() > serverComponent.getLength()) {
-                parsedClientOperation.set(clientIndex, clientComponent.subOperation(0, serverComponent.getLength()));
-                parsedClientOperation.add(clientIndex + 1, clientComponent.subOperation(serverComponent.getLength(),
+                parsedClientOperation.set(clientIndex, clientComponent.subComponent(0, serverComponent.getLength()));
+                parsedClientOperation.add(clientIndex + 1, clientComponent.subComponent(serverComponent.getLength(),
                         clientComponent.getLength()));
             } else if (clientComponent.getLength() < serverComponent.getLength()) {
-                parsedServerOperation.set(serverIndex, serverComponent.subOperation(0, clientComponent.getLength()));
-                parsedServerOperation.add(serverIndex + 1, serverComponent.subOperation(clientComponent.getLength(),
+                parsedServerOperation.set(serverIndex, serverComponent.subComponent(0, clientComponent.getLength()));
+                parsedServerOperation.add(serverIndex + 1, serverComponent.subComponent(clientComponent.getLength(),
                         serverComponent.getLength()));
             }
 

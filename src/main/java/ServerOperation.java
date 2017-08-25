@@ -1,3 +1,6 @@
+/**
+ * Models an operation sent to or sent by the server.
+ */
 public class ServerOperation {
     private Operation operation;
     private String key;

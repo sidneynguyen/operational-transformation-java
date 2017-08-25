@@ -7,8 +7,8 @@ public class OperationComponentTest {
     public void subOperationRetain() throws Exception {
         OperationComponent component =
                 new OperationComponent(OperationComponent.OP_COMP_RETAIN, null, 5);
-        OperationComponent component1 = component.subOperation(0, 2);
-        OperationComponent component2 = component.subOperation(2, 5);
+        OperationComponent component1 = component.subComponent(0, 2);
+        OperationComponent component2 = component.subComponent(2, 5);
 
         assertEquals(2, component1.getLength());
 
@@ -19,8 +19,8 @@ public class OperationComponentTest {
     public void subOperationInsert() throws Exception {
         OperationComponent component =
                 new OperationComponent(OperationComponent.OP_COMP_INSERT, "abcde", 5);
-        OperationComponent component1 = component.subOperation(0, 2);
-        OperationComponent component2 = component.subOperation(2, 5);
+        OperationComponent component1 = component.subComponent(0, 2);
+        OperationComponent component2 = component.subComponent(2, 5);
 
         assertEquals(2, component1.getLength());
         assertEquals("ab", component1.getValue());
@@ -33,8 +33,8 @@ public class OperationComponentTest {
     public void subOperationDelete() throws Exception {
         OperationComponent component =
                 new OperationComponent(OperationComponent.OP_COMP_DELETE, "abcde", 5);
-        OperationComponent component1 = component.subOperation(0, 2);
-        OperationComponent component2 = component.subOperation(2, 5);
+        OperationComponent component1 = component.subComponent(0, 2);
+        OperationComponent component2 = component.subComponent(2, 5);
 
         assertEquals(2, component1.getLength());
         assertEquals("ab", component1.getValue());

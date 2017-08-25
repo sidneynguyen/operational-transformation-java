@@ -1,3 +1,7 @@
+/**
+ * Contains two operations.
+ * Used to return two operations.
+ */
 public class OperationPair {
     private Operation clientOperation;
     private Operation serverOperation;

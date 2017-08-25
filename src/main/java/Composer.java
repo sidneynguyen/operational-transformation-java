@@ -1,21 +1,29 @@
+/**
+ * Implements a composer for generating composite operations.
+ */
 public class Composer {
     public Operation compose(Operation operation1, Operation operation2) {
+        // create copies
         Operation parsedOperation1 = new Operation(operation1);
         Operation parsedOperation2 = new Operation(operation2);
+
         Operation compositeOperation = new Operation();
         int i;
         for (i = 0; i < Math.min(parsedOperation1.size(), parsedOperation2.size()); i++) {
+            // slice operations if uneven operations
             if (parsedOperation1.get(i).getLength() < parsedOperation2.get(i).getLength()) {
                 OperationComponent component = parsedOperation2.get(i);
-                parsedOperation2.set(i, component.subOperation(0, parsedOperation1.get(i).getLength()));
-                parsedOperation2.add(i + 1, component.subOperation(parsedOperation1.get(i).getLength(),
+                parsedOperation2.set(i, component.subComponent(0, parsedOperation1.get(i).getLength()));
+                parsedOperation2.add(i + 1, component.subComponent(parsedOperation1.get(i).getLength(),
                         parsedOperation2.get(i).getLength()));
             } else if (parsedOperation1.get(i).getLength() > parsedOperation2.get(i).getLength()) {
                 OperationComponent component = parsedOperation1.get(i);
-                parsedOperation1.set(i, component.subOperation(0, parsedOperation2.get(i).getLength()));
-                parsedOperation1.add(i + 1, component.subOperation(parsedOperation2.get(i).getLength(),
+                parsedOperation1.set(i, component.subComponent(0, parsedOperation2.get(i).getLength()));
+                parsedOperation1.add(i + 1, component.subComponent(parsedOperation2.get(i).getLength(),
                         parsedOperation1.get(i).getLength()));
             }
+
+            // choose what operations to add or remove
             OperationComponent component1 = parsedOperation1.get(i);
             OperationComponent component2 = parsedOperation2.get(i);
             if (component1.getOperationType() == OperationComponent.OP_COMP_INSERT) {
@@ -49,6 +57,8 @@ public class Composer {
                 }
             }
         }
+
+        // add leftover operations
         while (i < parsedOperation1.size()) {
             compositeOperation.add(parsedOperation1.get(i));
             i++;

@@ -1,3 +1,6 @@
+/**
+ * Models a node in a graph of operations.
+ */
 public class OperationNode {
     private String hashKey;
     private Operation clientOperation;
@@ -13,10 +16,6 @@ public class OperationNode {
 
     public String getHashKey() {
         return hashKey;
-    }
-
-    public void setHashKey(String hashKey) {
-        this.hashKey = hashKey;
     }
 
     public Operation getClientOperation() {

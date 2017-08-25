@@ -1,3 +1,6 @@
+/**
+ * Models an operation component;
+ */
 public class OperationComponent {
     public static final int OP_COMP_RETAIN = 0;
     public static final int OP_COMP_INSERT = 1;
@@ -25,7 +28,13 @@ public class OperationComponent {
         return length;
     }
 
-    public OperationComponent subOperation(int start, int end) {
+    /**
+     * Returns a subset of a component.
+     * @param start     inclusive
+     * @param end       exclusive
+     * @return          the resulting component
+     */
+    public OperationComponent subComponent(int start, int end) {
         if (length < end - start || start < 0 || end > length || end < start || start >= length) {
             throw new IndexOutOfBoundsException();
         }
