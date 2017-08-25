@@ -55,7 +55,10 @@ public class ClientDriver {
     }
 
     public void receiveEdits() {
-        while (!serverOperations.isEmpty()) {
+        /*while (!serverOperations.isEmpty()) {
+            applyServerOperation();
+        }*/
+        if (!serverOperations.isEmpty()) {
             applyServerOperation();
         }
     }

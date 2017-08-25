@@ -77,7 +77,9 @@ public class ClientGraph {
         if (key.equals(sentOperationKey)) {
             currentServerNode = operationNodes.get(key);
             if (currentServerNode.getServerNode() != null) {
-                currentServerNode = currentServerNode.getServerNode();
+                while (currentServerNode.getServerNode() != null) {
+                    currentServerNode = currentServerNode.getServerNode();
+                }
                 currentServerNode.setHashKey(key);
             }
             sentOperationKey = null;
