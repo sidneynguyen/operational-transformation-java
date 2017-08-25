@@ -76,6 +76,10 @@ public class ClientGraph {
         // if this is the transformed operation of an operation sent by the client, update the graph
         if (key.equals(sentOperationKey)) {
             currentServerNode = operationNodes.get(key);
+            if (currentServerNode.getServerNode() != null) {
+                currentServerNode = currentServerNode.getServerNode();
+                currentServerNode.setHashKey(key);
+            }
             sentOperationKey = null;
             return;
         }

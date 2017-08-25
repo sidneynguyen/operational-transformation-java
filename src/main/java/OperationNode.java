@@ -65,4 +65,8 @@ public class OperationNode {
     public void setParentNodeFromClientOperation(OperationNode parentNodeFromClientOperation) {
         this.parentNodeFromClientOperation = parentNodeFromClientOperation;
     }
+
+    public void setHashKey(String key) {
+        hashKey = key;
+    }
 }
