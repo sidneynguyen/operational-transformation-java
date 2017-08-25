@@ -6,13 +6,13 @@ public class OperationTest {
     @Test
     public void simplify() throws Exception {
         Operation operation = new Operation();
-        operation.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 0, "a", 1));
-        operation.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 1, "b", 1));
-        operation.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 2, "c", 1));
+        operation.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, "a", 1));
+        operation.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, "b", 1));
+        operation.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, "c", 1));
         operation.simplify();
 
         Operation expectedOperation = new Operation();
-        expectedOperation.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 0, "abc", 3));
+        expectedOperation.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, "abc", 3));
 
         assertEquals(true, operation.equals(expectedOperation));
     }
@@ -20,10 +20,10 @@ public class OperationTest {
     @Test
     public void equals() throws Exception {
         Operation operation = new Operation();
-        operation.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 0, "abc", 3));
+        operation.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, "abc", 3));
 
         Operation expectedOperation = new Operation();
-        expectedOperation.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 0, "abc", 3));
+        expectedOperation.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, "abc", 3));
 
         assertEquals(true, operation.equals(expectedOperation));
     }

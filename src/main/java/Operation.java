@@ -39,15 +39,6 @@ public class Operation {
         return operationComponents.size();
     }
 
-    public void shiftPositions(int start, int amount) {
-        if (start < 0 || start >= operationComponents.size()) {
-            throw new IndexOutOfBoundsException();
-        }
-        for (int i = start; i < operationComponents.size(); i++) {
-            operationComponents.get(i).shiftPosition(amount);
-        }
-    }
-
     public OperationComponent remove(int index) {
         return operationComponents.remove(index);
     }
@@ -57,7 +48,6 @@ public class Operation {
             if (operationComponents.get(i).getOperationType() == operationComponents.get(i + 1).getOperationType()) {
                 operationComponents.set(i, new OperationComponent(
                         operationComponents.get(i).getOperationType(),
-                        operationComponents.get(i).getPosition(),
                         operationComponents.get(i).getValue() + operationComponents.get(i + 1).getValue(),
                         operationComponents.get(i).getLength() + operationComponents.get(i + 1). getLength()
                 ));

@@ -4,23 +4,17 @@ public class OperationComponent {
     public static final int OP_COMP_DELETE = 2;
 
     private int operationType;
-    private int position;
     private String value;
     private int length;
 
-    public OperationComponent(int operationType, int position, String value, int length) {
+    public OperationComponent(int operationType, String value, int length) {
         this.operationType = operationType;
-        this.position = position;
         this.value = value;
         this.length = length;
     }
 
     public int getOperationType() {
         return operationType;
-    }
-
-    public int getPosition() {
-        return position;
     }
 
     public String getValue() {
@@ -36,14 +30,9 @@ public class OperationComponent {
             throw new IndexOutOfBoundsException();
         }
         if (operationType == OP_COMP_RETAIN) {
-            return new OperationComponent(operationType, position + start, value, end - start);
+            return new OperationComponent(operationType, value, end - start);
         }
-        return new OperationComponent(operationType, position + start, value.substring(start, end),
-                end - start);
-    }
-
-    public void shiftPosition(int amount) {
-        position += amount;
+        return new OperationComponent(operationType, value.substring(start, end), end - start);
     }
 
     @Override

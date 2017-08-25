@@ -11,7 +11,7 @@ public class ServerGraphTest {
 
         ServerGraph graph = new ServerGraph("1234");
         Operation clientOp1 = new Operation();
-        clientOp1.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 0, "A", 1));
+        clientOp1.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, "A", 1));
 
         OperationNode node = graph.insertClientOperation(clientOp1, "abcd", "1234");
         Operation resultOp1 = graph.applyClientOperation(node);
@@ -27,7 +27,7 @@ public class ServerGraphTest {
 
         ServerGraph graph = new ServerGraph("1234");
         Operation clientOp1 = new Operation();
-        clientOp1.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 0, "A", 1));
+        clientOp1.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, "A", 1));
 
         OperationNode node1 = graph.insertClientOperation(clientOp1, "abcd", "1234");
         Operation resultOp1 = graph.applyClientOperation(node1);
@@ -37,8 +37,8 @@ public class ServerGraphTest {
         assertEquals("A", document1.getData());
 
         Operation clientOp2 = new Operation();
-        clientOp2.add(new OperationComponent(OperationComponent.OP_COMP_RETAIN, 0, "A", 1));
-        clientOp2.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 1, "B", 1));
+        clientOp2.add(new OperationComponent(OperationComponent.OP_COMP_RETAIN, "A", 1));
+        clientOp2.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, "B", 1));
 
         OperationNode node2 = graph.insertClientOperation(clientOp2, "xyz", "abcd");
         Operation resultOp2 = graph.applyClientOperation(node2);
@@ -54,7 +54,7 @@ public class ServerGraphTest {
 
         ServerGraph graph = new ServerGraph("1234");
         Operation clientOp1 = new Operation();
-        clientOp1.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 0, "A", 1));
+        clientOp1.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, "A", 1));
 
         OperationNode node1 = graph.insertClientOperation(clientOp1, "abcd", "1234");
         Operation resultOp1 = graph.applyClientOperation(node1);
@@ -64,8 +64,8 @@ public class ServerGraphTest {
         assertEquals("A", document1.getData());
 
         Operation clientOp2 = new Operation();
-        clientOp2.add(new OperationComponent(OperationComponent.OP_COMP_RETAIN, 0, "A", 1));
-        clientOp2.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 1, "C", 1));
+        clientOp2.add(new OperationComponent(OperationComponent.OP_COMP_RETAIN, "A", 1));
+        clientOp2.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, "C", 1));
 
         OperationNode node2 = graph.insertClientOperation(clientOp2, "xyz", "abcd");
         Operation resultOp2 = graph.applyClientOperation(node2);
@@ -75,8 +75,8 @@ public class ServerGraphTest {
         assertEquals("AC", document1.getData());
 
         Operation clientOp3 = new Operation();
-        clientOp3.add(new OperationComponent(OperationComponent.OP_COMP_RETAIN, 0, "A", 1));
-        clientOp3.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 1, "B", 1));
+        clientOp3.add(new OperationComponent(OperationComponent.OP_COMP_RETAIN, "A", 1));
+        clientOp3.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, "B", 1));
 
         OperationNode node3 = graph.insertClientOperation(clientOp3, "54321", "abcd");
         Operation resultOp3 = graph.applyClientOperation(node3);
@@ -92,7 +92,7 @@ public class ServerGraphTest {
 
         ServerGraph graph = new ServerGraph("1234");
         Operation clientOp1 = new Operation();
-        clientOp1.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 0, "A", 1));
+        clientOp1.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, "A", 1));
 
         OperationNode node1 = graph.insertClientOperation(clientOp1, "abcd", "1234");
         Operation resultOp1 = graph.applyClientOperation(node1);
@@ -102,8 +102,8 @@ public class ServerGraphTest {
         assertEquals("A", document1.getData());
 
         Operation clientOp2 = new Operation();
-        clientOp2.add(new OperationComponent(OperationComponent.OP_COMP_RETAIN, 0, "A", 1));
-        clientOp2.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 1, "C", 1));
+        clientOp2.add(new OperationComponent(OperationComponent.OP_COMP_RETAIN, "A", 1));
+        clientOp2.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, "C", 1));
 
         OperationNode node2 = graph.insertClientOperation(clientOp2, "xyz", "abcd");
         Operation resultOp2 = graph.applyClientOperation(node2);
@@ -113,8 +113,8 @@ public class ServerGraphTest {
         assertEquals("AC", document1.getData());
 
         Operation clientOp3 = new Operation();
-        clientOp3.add(new OperationComponent(OperationComponent.OP_COMP_RETAIN, 0, "A", 1));
-        clientOp3.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 1, "B", 1));
+        clientOp3.add(new OperationComponent(OperationComponent.OP_COMP_RETAIN, "A", 1));
+        clientOp3.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, "B", 1));
 
         OperationNode node3 = graph.insertClientOperation(clientOp3, "54321", "abcd");
         Operation resultOp3 = graph.applyClientOperation(node3);
@@ -124,7 +124,7 @@ public class ServerGraphTest {
         assertEquals("ABC", document1.getData());
 
         Operation clientOp4 = new Operation();
-        clientOp4.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, 0, "D", 1));
+        clientOp4.add(new OperationComponent(OperationComponent.OP_COMP_INSERT, "D", 1));
 
         OperationNode node4 = graph.insertClientOperation(clientOp4, "www", "1234");
         Operation resultOp4 = graph.applyClientOperation(node4);

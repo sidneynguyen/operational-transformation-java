@@ -28,13 +28,11 @@ public class Transformer {
                     if (clientComponent.getValue().compareTo(serverComponent.getValue()) < 0) {
                         parsedClientOperation.add(clientIndex + 1, new OperationComponent(
                                 OperationComponent.OP_COMP_RETAIN,
-                                0,
                                 serverComponent.getValue(),
                                 serverComponent.getLength()
                         ));
                         parsedServerOperation.add(serverIndex, new OperationComponent(
                                 OperationComponent.OP_COMP_RETAIN,
-                                0,
                                 clientComponent.getValue(),
                                 clientComponent.getLength()
                         ));
@@ -43,13 +41,11 @@ public class Transformer {
                     } else {
                         parsedClientOperation.add(clientIndex, new OperationComponent(
                                 OperationComponent.OP_COMP_RETAIN,
-                                0,
                                 serverComponent.getValue(),
                                 serverComponent.getLength()
                         ));
                         parsedServerOperation.add(serverIndex + 1, new OperationComponent(
                                 OperationComponent.OP_COMP_RETAIN,
-                                0,
                                 clientComponent.getValue(),
                                 clientComponent.getLength()
                         ));
@@ -59,14 +55,12 @@ public class Transformer {
                 } else if (serverComponent.getOperationType() == OperationComponent.OP_COMP_DELETE) {
                     parsedServerOperation.add(serverIndex, new OperationComponent(
                             OperationComponent.OP_COMP_RETAIN,
-                            0,
                             clientComponent.getValue(),
                             clientComponent.getLength()
                     ));
                 } else {
                     parsedServerOperation.add(serverIndex, new OperationComponent(
                             OperationComponent.OP_COMP_RETAIN,
-                            0,
                             clientComponent.getValue(),
                             clientComponent.getLength()
                     ));
@@ -88,7 +82,6 @@ public class Transformer {
                 if (serverComponent.getOperationType() == OperationComponent.OP_COMP_INSERT) {
                     parsedClientOperation.add(clientIndex, new OperationComponent(
                             OperationComponent.OP_COMP_RETAIN,
-                            clientComponent.getPosition(),
                             serverComponent.getValue(),
                             serverComponent.getLength()
                     ));
@@ -109,7 +102,6 @@ public class Transformer {
                 if (operation.getOperationType() == OperationComponent.OP_COMP_INSERT) {
                     parsedServerOperation.add(new OperationComponent(
                             OperationComponent.OP_COMP_RETAIN,
-                            0,
                             operation.getValue(),
                             operation.getLength()
                     ));
@@ -124,7 +116,6 @@ public class Transformer {
                 if (operation.getOperationType() == OperationComponent.OP_COMP_INSERT) {
                     parsedClientOperation.add(new OperationComponent(
                             OperationComponent.OP_COMP_RETAIN,
-                            0,
                             operation.getValue(),
                             operation.getLength()
                     ));

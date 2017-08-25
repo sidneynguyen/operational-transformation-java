@@ -57,7 +57,6 @@ public class EditDistanceCalculator {
         if (i == 0 && j > 0) {
             components.addFirst(new OperationComponent(
                     OperationComponent.OP_COMP_INSERT,
-                    0,
                     y,
                     j
             ));
@@ -67,7 +66,6 @@ public class EditDistanceCalculator {
         if (j == 0 && i > 0) {
             components.addFirst(new OperationComponent(
                     OperationComponent.OP_COMP_DELETE,
-                    0,
                     x,
                     i
             ));
@@ -83,7 +81,6 @@ public class EditDistanceCalculator {
             if (diagonal == current && diagonal < left && diagonal < up) {
                 components.addFirst(new OperationComponent(
                         OperationComponent.OP_COMP_RETAIN,
-                        0,
                         null,
                         1
                 ));
@@ -92,7 +89,6 @@ public class EditDistanceCalculator {
             } else if (left <= up) {
                 components.addFirst(new OperationComponent(
                         OperationComponent.OP_COMP_INSERT,
-                        0,
                         "" + y.charAt(j - 1),
                         1
                 ));
@@ -100,7 +96,6 @@ public class EditDistanceCalculator {
             } else {
                 components.addFirst(new OperationComponent(
                         OperationComponent.OP_COMP_DELETE,
-                        0,
                         "" + x.charAt(i - 1),
                         1
                 ));
@@ -110,7 +105,6 @@ public class EditDistanceCalculator {
         while (i > 0) {
             components.addFirst(new OperationComponent(
                     OperationComponent.OP_COMP_DELETE,
-                    0,
                     "" + x.charAt(i - 1),
                     1
             ));
@@ -119,7 +113,6 @@ public class EditDistanceCalculator {
         while (j > 0) {
             components.addFirst(new OperationComponent(
                     OperationComponent.OP_COMP_INSERT,
-                    0,
                     "" + y.charAt(j - 1),
                     1
             ));
