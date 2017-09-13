@@ -3,6 +3,7 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import spark.Spark;
 
 import static spark.Spark.*;
 
@@ -17,10 +18,10 @@ public class ServerWebSocketHandler {
         data = "asd";
         key = "asd";
 
-        staticFileLocation("/public"); //index.html is served at localhost:4567 (default port)
-        port(3000);
-        webSocket("/chat", ServerWebSocketHandler.class);
-        init();
+        Spark.staticFileLocation("/public"); //index.html is served at localhost:4567 (default port)
+        Spark.port(3000);
+        Spark.webSocket("/chat", ServerWebSocketHandler.class);
+        Spark.init();
     }
 
     private String sender, msg;
@@ -47,6 +48,6 @@ public class ServerWebSocketHandler {
 
     @OnWebSocketMessage
     public void onMessage(Session user, String message) {
-        Chat.broadcastMessage(sender = Chat.userUsernameMap.get(user), msg = data);
+        Chat.broadcastMessage(sender = Chat.userUsernameMap.get(user), msg = message);
     }
 }
